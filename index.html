@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeLearn - Coding Language Learning Platform</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        background-color: #f5f5f5;
+      }
+      .header {
+        background: #3a3f47;
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .header .logo {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+      .header nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        transition: background 0.3s;
+      }
+      .header nav a:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .header .user {
+        display: flex;
+        align-items: center;
+      }
+      .user-avatar {
+        background: #5c6bc0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+      }
+      .sidebar {
+        width: 220px;
+        background: #1c2526;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        padding-top: 70px;
+        color: white;
+        z-index: 90;
+        transition: transform 0.3s;
+      }
+      .sidebar a {
+        display: block;
+        padding: 15px 20px;
+        color: white;
+        text-decoration: none;
+        border-left: 4px solid transparent;
+        transition: all 0.2s;
+      }
+      .sidebar a:hover,
+      .sidebar a.active {
+        background: #2a3439;
+        border-left: 4px solid #03a9f4;
+      }
+      .sidebar .role-label {
+        padding: 10px 20px;
+        font-size: 0.8em;
+        text-transform: uppercase;
+        color: #aaa;
+        border-bottom: 1px solid #2a3439;
+        margin-bottom: 10px;
+      }
+      .main-content {
+        margin-left: 220px;
+        padding: 80px 20px 20px;
+        min-height: calc(100vh - 100px);
+      }
+      .card {
+        background: white;
+        border-radius: 8px;
+        padding: 25px;
+        margin: 15px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      }
+      .auth-container {
+        max-width: 400px;
+        margin: 80px auto;
+      }
+      .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      .course-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .course-card .course-image {
+        height: 140px;
+        background: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 2em;
+      }
+      .course-card .course-content {
+        padding: 15px;
+      }
+      .course-card .course-title {
+        margin: 0 0 10px;
+        font-size: 1.2em;
+      }
+      .course-card .course-description {
+        color: #666;
+        margin-bottom: 15px;
+        height: 60px;
+        overflow: hidden;
+      }
+      .course-card .course-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+        color: #888;
+      }
+      .btn {
+        background: #03a9f4;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background 0.2s;
+        display: inline-block;
+      }
+      .btn:hover {
+        background: #0288d1;
+      }
+      .btn-secondary {
+        background: #757575;
+      }
+      .btn-secondary:hover {
+        background: #616161;
+      }
+      .btn-success {
+        background: #4caf50;
+      }
+      .btn-success:hover {
+        background: #388e3c;
+      }
+      .btn-danger {
+        background: #f44336;
+      }
+      .btn-danger:hover {
+        background: #d32f2f;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+      .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+      .card-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .form-container {
+        display: none;
+      }
+      .form-container.active {
+        display: block;
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table th, .table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+      .table th {
+        background: #f9f9f9;
+        font-weight: 600;
+      }
+      .badge {
+        padding: 5px 10px;
+        border-radius: 30px;
+        font-size: 0.75em;
+        font-weight: 600;
+      }
+      .badge-primary {
+        background: #e3f2fd;
+        color: #1976d2;
+      }
+      .badge-success {
+        background: #e8f5e9;
+        color: #388e3c;
+      }
+      .status-message {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+      }
+      .success {
+        background-color: #e8f5e9;
+        color: #388e3c;
+        border: 1px solid #c8e6c9;
+      }
+      .error {
+        background-color: #ffebee;
+        color: #d32f2f;
+        border: 1px solid #ffcdd2;
+      }
+      .tabs {
+        display: flex;
+        margin-bottom: 20px;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      }
+      .tab {
+        padding: 15px 20px;
+        cursor: pointer;
+        flex: 1;
+        text-align: center;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+      }
+      .tab.active {
+        border-bottom: 3px solid #03a9f4;
+        font-weight: 600;
+      }
+      .tab:hover:not(.active) {
+        background: #f9f9f9;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+        .sidebar.active {
+          transform: translateX(0);
+        }
+        .main-content {
+          margin-left: 0;
+        }
+        .course-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">CodeLearn</div>
+      <nav id="main-nav">
+        <!-- Navigation will be dynamically generated based on user role -->
+      </nav>
+      <div class="user">
+        <div class="user-avatar" id="user-avatar">G</div>
+        <span id="user-name">Guest</span>
+      </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <!-- Sidebar will be dynamically generated based on user role -->
+    </div>
+
+    <div class="main-content">
+      <!-- Login Section -->
+      <div id="login-section" class="form-container active">
+        <div class="auth-container">
+          <div class="card">
+            <div class="card-header">
+              <h2>Login</h2>
+            </div>
+            <div class="form-group">
+              <label for="login-email">Email</label>
+              <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required />
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required />
+            </div>
+            <button class="btn" onclick="login()">Login</button>
+            <div id="login-status" class="status-message"></div>
+            <p style="margin-top: 20px; text-align: center;">
+              New to CodeLearn? 
+              <a href="#" onclick="showSection('register')">Register an account</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Register Section -->
+      <div id="register-section" class="form-container">
+        <div class="auth-container">
+          <div class="card">
+            <div class="card-header">
+              <h2>Create an Account</h2>
+            </div>
+            <div class="form-group">
+              <label for="register-name">Full Name</label>
+              <input type="text" id="register-name" class="form-control" placeholder="Enter your full name" required />
+            </div>
+            <div class="form-group">
+              <label for="register-email">Email</label>
+              <input type="email" id="register-email" class="form-control" placeholder="Enter your email" required />
+            </div>
+            <div class="form-group">
+              <label for="register-password">Password</label>
+              <input type="password" id="register-password" class="form-control" placeholder="Create a password" required />
+            </div>
+            <div class="form-group">
+              <label for="register-role">Account Type</label>
+              <select id="register-role" class="form-control" required>
+                <option value="Learner">Student/Learner</option>
+                <option value="Instructor">Instructor</option>
+                <option value="Admin">Administrator</option>
+              </select>
+            </div>
+            <button class="btn" onclick="registerUser()">Register</button>
+            <div id="register-status" class="status-message"></div>
+            <p style="margin-top: 20px; text-align: center;">
+              Already have an account? 
+              <a href="#" onclick="showSection('login')">Login</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Dashboard -->
+      <div id="student-dashboard-section" class="form-container">
+        <div class="card">
+          <div class="card-header">
+            <h2>My Dashboard</h2>
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+          </div>
+          
+          <div class="tabs">
+            <div class="tab active" onclick="showTab('enrolled-courses')">My Enrolled Courses</div>
+            <div class="tab" onclick="showTab('all-courses')">Browse All Courses</div>
+            <div class="tab" onclick="showTab('student-assessments')">My Assessments</div>
+          </div>
+          
+          <div id="enrolled-courses" class="tab-content active">
+            <h3>My Enrolled Courses</h3>
+            <div id="enrolled-courses-list" class="course-grid">
+              <!-- Enrolled courses will be loaded here -->
+              <p id="no-enrolled-courses">You haven't enrolled in any courses yet. Check out our available courses!</p>
+            </div>
+          </div>
+          
+          <div id="all-courses" class="tab-content">
+            <h3>Available Courses</h3>
+            <div id="all-courses-list" class="course-grid">
+              <!-- All courses will be loaded here -->
+            </div>
+          </div>
+          
+          <div id="student-assessments" class="tab-content">
+            <h3>My Assessments</h3>
+            <div class="card">
+              <h4>Submit Assessment</h4>
+              <div class="form-group">
+
+
+               <label for="assessment-courseId">Course</label>
+<select id="assessment-courseId" class="form-control" required>
+  <option value="">Select a course</option>
+</select>
+
+              </div>
+              <div id="assessments-list"></div>
+              <div class="form-group">
+                <label for="assessment-score">Score (0-100)</label>
+                <input type="number" id="assessment-score" class="form-control" min="0" max="100" required />
+              </div>
+              <button class="btn" onclick="submitAssessment()">Submit Assessment</button>
+              <div id="assessment-status" class="status-message"></div>
+            </div>
+            <div class="card">
+              <h4>Assessment History</h4>
+              <table class="table" border="1">
+                <thead>
+                  <tr>
+                    <th>Course</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="assessment-history">
+                  
+                </tbody>
+              </table>
+            </div>
+            <div id ="dashboard-status"></div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <h2>Course Feedback</h2>
+          </div>
+          <div class="form-group">
+            <label for="feedback-courseId">Course</label>
+            <select id="feedback-courseId" class="form-control" required>
+              <option value="">Select a course</option>
+              <!-- Course options will be populated dynamically -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="feedback-comment">Your Feedback</label>
+            <textarea id="feedback-comment" class="form-control" rows="4" placeholder="Share your experience with this course"></textarea>
+          </div>
+          <button class="btn" onclick="submitFeedback()">Submit Feedback</button>
+          <div id="feedback-status" class="status-message"></div>
+        </div>
+      </div>
+
+      <!-- Instructor Dashboard -->
+      <div id="instructor-dashboard-section" class="form-container">
+        <div class="card">
+          <div class="card-header">
+            <h2>Instructor Dashboard</h2>
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+          </div>
+          
+          <div class="tabs">
+            <div class="tab active" onclick="showTab('instructor-courses')">My Courses</div>
+            <div class="tab" onclick="showTab('add-course')">Add New Course</div>
+            <div class="tab" onclick="showTab('student-progress')">Student Progress</div>
+          </div>
+          
+          <div id="instructor-courses" class="tab-content active">
+            <h3>My Courses</h3>
+            <div id="instructor-courses-list" class="course-grid">
+              <!-- Instructor courses will be loaded here -->
+            </div>
+          </div>
+          
+          <div id="add-course" class="tab-content">
+            <h3>Create New Course</h3>
+            <div class="form-group">
+              <label for="course-title">Course Title</label>
+              <input type="text" id="course-title" class="form-control" placeholder="Enter course title" required />
+            </div>
+            <div class="form-group">
+              <label for="course-description">Course Description</label>
+              <textarea id="course-description" class="form-control" rows="4" placeholder="Enter course description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="course-duration">Duration (in hours)</label>
+              <input type="number" id="course-duration" class="form-control" min="1" placeholder="Enter duration" />
+            </div>
+            <div class="form-group">
+              <label for="course-level">Difficulty Level</label>
+              <select id="course-level" class="form-control" >
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+            <button class="btn" onclick="createCourse()">Create Course</button>
+            <div id="create-course-status" class="status-message"></div>
+          </div>
+          
+          <div id="student-progress" class="tab-content">
+            <h3>Student Progress</h3>
+            <table class="table" border="1">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Course</th>
+                  <th>Progress</th>
+                  <th>Last Active</th>
+                </tr>
+              </thead>
+              <tbody id="student-progress-list">
+                <!-- Student progress will be loaded here -->
+              </tbody>
+            </table>
+            <div id="instructor-dashboard-status"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Dashboard -->
+      <div id="admin-dashboard-section" class="form-container">
+        <div class="card">
+          <div class="card-header">
+            <h2>Administrator Dashboard</h2>
+        
+            
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+          </div>
+          <div class="tabs">
+            <div class="tab active" onclick="showTab('user-management')">User Management</div>
+            <div class="tab" onclick="showTab('course-management')">Course Management</div>
+            <div class="tab" onclick="showTab('platform-analytics')">Platform Analytics</div>
+          </div>
+          
+          <div id="user-management" class="tab-content active">
+            <h3>User Management</h3>
+          <div id="users-list"></div>
+
+          </div>
+          
+          <div id="course-management" class="tab-content">
+            <h3>Course Management</h3>
+            <div id="all-courses-list-2"></div>
+          </div>
+          
+          <div id="platform-analytics" class="tab-content">
+            <h3>Platform Analytics</h3>
+<div id="platform-analytics-content"></div>
+<div id="admin-dashboard-status"></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Global variables
+      let currentUser = null;
+      let allCourses = [];
+      let userEnrollments = [];
+
+      // Helper functions
+      function generateId() {
+        return Math.random().toString(36).substr(2, 9);
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric' 
+        });
+      }
+
+      function getInitials(name) {
+        return name.split(' ').map(n => n[0]).join('').toUpperCase();
+      }
+
+      function showStatus(elementId, message, isSuccess) {
+        const statusElement = document.getElementById(elementId);
+        statusElement.textContent = message;
+        statusElement.className = `status-message ${isSuccess ? "success" : "error"}`;
+        statusElement.style.display = "block";
+        setTimeout(() => {
+          statusElement.style.display = "none";
+        }, 5000);
+      }
+
+      function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll(".form-container").forEach((section) => {
+          section.classList.remove("active");
+        });
+        
+        // Show requested section
+        if (sectionId === 'login' || sectionId === 'register') {
+          document.getElementById(`${sectionId}-section`).classList.add("active");
+        } else if (currentUser) {
+          // Show appropriate dashboard based on user role
+          if (currentUser.role === 'Admin') {
+            document.getElementById('admin-dashboard-section').classList.add("active");
+          } else if (currentUser.role === 'Instructor') {
+            document.getElementById('instructor-dashboard-section').classList.add("active");
+          } else { // Learner
+            document.getElementById('student-dashboard-section').classList.add("active");
+          }
+          
+          // Load appropriate data based on the role
+          if (currentUser.role === 'Admin') {
+            loadAdminData();
+          } else if (currentUser.role === 'Instructor') {
+            loadInstructorData();
+          } else { // Learner
+            loadLearnerData();
+          }
+        } else {
+          // Default to login if no user is logged in
+          document.getElementById('login-section').classList.add("active");
+        }
+        
+        // Update sidebar based on current user
+        updateSidebar();
+      }
+      
+      function showTab(tabId) {
+        // Get the parent element (either student, instructor, or admin dashboard)
+        const parent = document.querySelector('.form-container.active');
+        
+        // Hide all tab contents in the active dashboard
+        parent.querySelectorAll('.tab-content').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        
+        // Deactivate all tabs
+        parent.querySelectorAll('.tab').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        
+        // Activate the selected tab
+        parent.querySelector(`#${tabId}`).classList.add('active');
+        
+        // Find and activate the tab button
+        const tabs = parent.querySelectorAll('.tab');
+        for (let i = 0; i < tabs.length; i++) {
+          if (tabs[i].getAttribute('onclick').includes(tabId)) {
+            tabs[i].classList.add('active');
+            break;
+          }
+        }
+      }
+
+      function updateSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const mainNav = document.getElementById('main-nav');
+        
+        // Clear existing content
+        sidebar.innerHTML = '';
+        mainNav.innerHTML = '';
+        
+        if (!currentUser) {
+          // Guest navigation
+          mainNav.innerHTML = `
+            <a href="#" onclick="showSection('login')">Login</a>
+            <a href="#" onclick="showSection('register')">Register</a>
+          `;
+          return;
+        }
+        
+        // Add role label
+        const roleLabel = document.createElement('div');
+        roleLabel.className = 'role-label';
+        roleLabel.textContent = currentUser.role;
+        sidebar.appendChild(roleLabel);
+        
+        // Add appropriate navigation based on role
+        if (currentUser.role === 'Admin') {
+          sidebar.innerHTML += `
+            <a href="#" onclick="showTab('user-management'); return false;" class="active">User Management</a>
+            <a href="#" onclick="showTab('course-management'); return false;">Course Management</a>
+            <a href="#" onclick="showTab('platform-analytics'); return false;">Platform Analytics</a>
+          `;
+          mainNav.innerHTML = `
+            <a href="#" onclick="showTab('user-management')">Users</a>
+            <a href="#" onclick="showTab('course-management')">Courses</a>
+            <a href="#" onclick="showTab('platform-analytics')">Analytics</a>
+          `;
+        } else if (currentUser.role === 'Instructor') {
+          sidebar.innerHTML += `
+            <a href="#" onclick="showTab('instructor-courses'); return false;" class="active">My Courses</a>
+            <a href="#" onclick="showTab('add-course'); return false;">Add New Course</a>
+            <a href="#" onclick="showTab('student-progress'); return false;">Student Progress</a>
+          `;
+          mainNav.innerHTML = `
+            <a href="#" onclick="showTab('instructor-courses')">My Courses</a>
+            <a href="#" onclick="showTab('add-course')">Add Course</a>
+            <a href="#" onclick="showTab('student-progress')">Students</a>
+          `;
+        } else { // Learner
+          sidebar.innerHTML += `
+            <a href="#" onclick="showTab('enrolled-courses'); return false;" class="active">My Courses</a>
+            <a href="#" onclick="showTab('all-courses'); return false;">Browse Courses</a>
+            <a href="#" onclick="showTab('student-assessments'); return false;">Assessments</a>
+          `;
+          mainNav.innerHTML = `
+            <a href="#" onclick="showTab('enrolled-courses')">My Courses</a>
+            <a href="#" onclick="showTab('all-courses')">Browse Courses</a>
+            <a href="#" onclick="showTab('student-assessments')">Assessments</a>
+          `;
+        }
+      }
+
+      // Authentication functions
+      async function login() {
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+
+        if (!email || !password) {
+          showStatus("login-status", "Please fill in all fields", false);
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await response.json();
+          
+          if (data.success) {
+            currentUser = data.user;
+            document.getElementById("user-name").textContent = currentUser.name;
+            document.getElementById("user-avatar").textContent = getInitials(currentUser.name);
+            showStatus("login-status", "Logged in successfully!", true);
+            showSection("dashboard");
+          } else {
+            showStatus("login-status", "Invalid email or password", false);
+          }
+        } catch (err) {
+          showStatus("login-status", "Login failed. Please try again.", false);
+          console.error("Login error:", err);
+        }
+      }
+
+      async function registerUser() {
+        const name = document.getElementById("register-name").value;
+        const email = document.getElementById("register-email").value;
+        const password = document.getElementById("register-password").value;
+        const role = document.getElementById("register-role").value;
+
+        if (!name || !email || !password || !role) {
+          showStatus("register-status", "Please fill in all fields", false);
+          return;
+        }
+
+        const user = {
+          userId: generateId(),
+          name,
+          email,
+          password, // In a production app, this should be hashed
+          role,
+          registeredAt: new Date().toISOString(),
+        };
+
+        try {
+          const response = await fetch("/api/users/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+          });
+          const data = await response.json();
+          
+          if (response.ok) {
+            showStatus("register-status", "Registered successfully! Please log in.", true);
+            setTimeout(() => {
+              showSection("login");
+            }, 1500);
+          } else {
+            showStatus("register-status", data.error || "Registration failed", false);
+          }
+        } catch (err) {
+          showStatus("register-status", "Registration failed. Please try again.", false);
+          console.error("Registration error:", err);}}
+
+// User Authentication Functions
+
+function logout() {
+  currentUser = null;
+  document.getElementById("user-name").textContent = "Guest";
+  document.getElementById("user-avatar").textContent = "";
+  showSection("login");
+  
+  // Clear any form values that might have private data
+  document.querySelectorAll("input").forEach(input => {
+    input.value = "";
+  });
+  
+  // Show logout message
+  showStatus("login-status", "Logged out successfully!", true);
+}
+
+// Dashboard Loading Functions
+async function loadLearnerData() {
+  try {
+    const coursesResponse = await fetch("/api/courses");
+    const coursesData = await coursesResponse.json();
+    const allCourses = coursesData.courses || [];
+
+    // Populate dropdown
+    const selectElement = document.getElementById("assessment-courseId");
+    allCourses.forEach(course => {
+      const option = document.createElement("option");
+      option.value = course.courseId;
+      option.textContent = course.title;
+      selectElement.appendChild(option);
+    });
+
+    // Load enrollments
+    const enrollmentResponse = await fetch(`/api/enrollments?userId=${currentUser.userId}`);
+    const enrollmentData = await enrollmentResponse.json();
+    const userEnrollments = enrollmentData.enrollments || [];
+
+    // Populate enrolled courses
+    const enrolledCoursesElement = document.getElementById("enrolled-courses-list");
+    if (enrolledCoursesElement) {
+      if (userEnrollments.length === 0) {
+        enrolledCoursesElement.innerHTML = '<div class="empty-state">You are not enrolled in any courses yet.</div>';
+      } else {
+        const enrolledCourseDetails = userEnrollments.map(enrollment => {
+          const course = allCourses.find(c => c.courseId === enrollment.courseId) || {};
+          return { ...course, ...enrollment };
+        });
+        console.log(enrolledCourseDetails)
+        enrolledCoursesElement.innerHTML = enrolledCourseDetails.map(course => `
+          <div class="course-card">
+            <div class="course-header">
+              <h3>${course.title}</h3>
+              <span class="progress-badge">${course.progress || 0}% Complete</span>
+            </div>
+            <p>${course.description || 'No description available'}</p>
+            <div class="course-footer">
+              <span class="enrollment-date">Enrolled: ${formatDate(course.enrolledAt)}</span>
+              <button class="btn primary" onclick="continueCourse('${course.courseId}')">Continue Learning</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Populate available courses
+    const allCoursesElement = document.getElementById("all-courses-list");
+    if (allCoursesElement) {
+      const enrolledIds = userEnrollments.map(e => e.courseId);
+      const availableCourses = allCourses.filter(course => !enrolledIds.includes(course.courseId));
+      
+      if (availableCourses.length === 0) {
+        allCoursesElement.innerHTML = '<div class="empty-state">No courses available at the moment.</div>';
+      } else {
+        allCoursesElement.innerHTML = availableCourses.map(course => `
+          <div class="course-card">
+            <h3>${course.title}</h3>
+            <p>${course.description || 'No description available'}</p>
+            <div class="course-details">
+              <span>Instructor: ${course.instructorName || 'Unknown'}</span>
+              <span>Duration: ${course.duration || 'Not specified'}</span>
+            </div>
+            <button class="btn primary" onclick="enrollCourse()">Enroll Now</button>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Load assessments
+    const assessmentsResponse = await fetch(`/api/assessments`);
+    const assessmentsData = await assessmentsResponse.json();
+    const assessments = assessmentsData.assessments || [];
+
+    // Update assessment table
+    const assestable = document.getElementById("assessment-history");
+    assestable.innerHTML = assessments.map(user => `
+      <tr>
+        <td>${user.courseId}</td>
+        <td>${user.score}</td>
+        <td>${formatDate(user.completedAt)}</td>
+      </tr>
+    `).join('');
+
+    // Update assessment cards
+    const assessmentsElement = document.getElementById("assessments-list");
+    if (assessmentsElement) {
+      if (assessments.length === 0) {
+        assessmentsElement.innerHTML = '<div class="empty-state">You have not completed any assessments yet.</div>';
+      } else {
+        assessmentsElement.innerHTML = assessments.map(assessment => {
+          const course = allCourses.find(c => c.courseId === assessment.courseId) || {};
+          return `
+            <div class="assessment-card">
+              <div class="assessment-header">
+                <h3>${course.title}</h3>
+                <span class="score-badge">${assessment.score}%</span>
+              </div>
+              <p>Completed on: ${formatDate(assessment.completedAt)}</p>
+              <div class="assessment-status">
+                ${assessment.score >= 70 ? '<span class="status passed">Passed</span>' : '<span class="status failed">Failed</span>'}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Update dashboard
+    document.getElementById("dash-enrolled-courses").textContent = userEnrollments.length;
+    document.getElementById("dash-completed-assessments").textContent = assessments.length;
+
+  } catch (err) {
+    console.error("Error loading learner data:", err);
+    showStatus("dashboard-status", "Failed to load data. Please try again later.", false);
+  }
+}
+
+
+async function enrollCourse(courseId) {
+  if (!currentUser) {
+    showStatus("login-status", "Please log in to enroll in a course.", false);
+    showSection("login");
+    return;
+  }
+  alert("Course enrolled ")
+
+  // Check if the user is already enrolled in this course
+  const isAlreadyEnrolled = userEnrollments.some(enrollment => enrollment.courseId === courseId);
+  if (isAlreadyEnrolled) {
+    showStatus("all-courses-status", "You are already enrolled in this course.", false);
+    return;
+  }
+
+  const enrollment = {
+    enrollmentId: generateId(),
+    userId: currentUser.userId,
+    courseId,
+    enrolledAt: new Date().toISOString(),
+    progress: 0,
+  };
+
+  try {
+    const response = await fetch("/api/enrollments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(enrollment),
+    });
+
+    
+    if (response.ok) {
+      showStatus("all-courses-status", "Enrolled in course successfully!", true);
+      
+      // Add the new enrollment to the local array
+      userEnrollments.push(enrollment);
+      
+      // Reload data to show the newly enrolled course
+      if (currentUser.role === 'Learner') {
+        loadLearnerData();
+        showTab("enrolled-courses");
+        alert("Course Enrolled")
+      }
+    } else {
+      const errorData = await response.json();
+      showStatus("all-courses-status", errorData.error || "Failed to enroll in course", false);
+    }
+    
+  } catch (err) {
+    console.error("Error enrolling in course:", err);
+    showStatus("all-courses-status", "Failed to enroll in course. Please try again.", false);
+  }
+}
+async function loadInstructorData() {
+  try {
+    // Fetch courses created by this instructor
+    const coursesResponse = await fetch(`/api/courses?instructorId=${currentUser.userId}`);
+    const coursesData = await coursesResponse.json();
+    const instructorCourses = coursesData.courses || [];
+    
+    // Update instructor courses tab
+    const coursesElement = document.getElementById("instructor-courses-list");
+    if (coursesElement) {
+      if (instructorCourses.length === 0) {
+        coursesElement.innerHTML = '<div class="empty-state">You have not created any courses yet.</div>';
+      } else {
+        coursesElement.innerHTML = instructorCourses.map(course => `
+          <div class="course-card">
+            <div class="course-header">
+              <h3>${course.title}</h3>
+              <span class="student-count">${course.enrollmentCount || 0} Students</span>
+            </div>
+            <p>${course.description}</p>
+            <div class="course-footer">
+              <span>Created: ${formatDate(course.createdAt)}</span>
+              <div class="button-group">
+
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+    
+    // Update student progress tab
+    const progressElement = document.getElementById("student-progress-list");
+    if (progressElement) {
+      // Get all enrollments for courses taught by this instructor
+      const enrollmentsResponse = await fetch(`/api/enrollments?instructorId=${currentUser.userId}`);
+      const enrollmentsData = await enrollmentsResponse.json();
+      const enrollments = enrollmentsData.enrollments || [];
+      
+      if (enrollments.length === 0) {
+        progressElement.innerHTML = '<div class="empty-state">No students enrolled in your courses yet.</div>';
+      } else {
+        // Get user details for each enrollment
+        const userIds = [...new Set(enrollments.map(e => e.userId))];
+        const usersResponse = await fetch(`/api/admin/users?ids=${userIds.join(',')}`);
+        const usersData = await usersResponse.json();
+        const users = usersData.users || [];
+        
+        // Group enrollments by course
+        const courseEnrollments = {};
+        enrollments.forEach(enrollment => {
+          if (!courseEnrollments[enrollment.courseId]) {
+            courseEnrollments[enrollment.courseId] = [];
+          }
+          courseEnrollments[enrollment.courseId].push(enrollment);
+        });
+        
+        // Create HTML for each course and its student progress
+        let html = '';
+        for (const courseId in courseEnrollments) {
+          const course = instructorCourses.find(c => c.courseId === courseId) || {};
+          html += `
+            <div class="course-progress-section">
+              <h3>${course.title || 'Unknown Course'}</h3>
+              <div class="student-list">
+          `;
+          
+          courseEnrollments[courseId].forEach(enrollment => {
+            const user = users.find(u => u.userId === enrollment.userId) || {};
+            html += `
+              <div class="student-card">
+                <div class="student-info">
+                  <span class="student-avatar">${getInitials(user.name || 'Unknown')}</span>
+                  <span class="student-name">${user.name || 'Unknown'}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: ${enrollment.progress || 0}%"></div>
+                </div>
+                <span class="progress-percentage">${enrollment.progress || 0}%</span>
+              </div>
+            `;
+          });
+          
+          html += `
+              </div>
+            </div>
+          `;
+        }
+        
+        progressElement.innerHTML = html;
+      }
+    }
+    
+  } catch (err) {
+    console.error("Error loading instructor data:", err);
+    showStatus("instructor-dashboard-status", "Failed to load data. Please try again later.", false);
+  }
+}
+
+async function loadAdminData() {
+  try {
+    // Load all users
+    const usersResponse = await fetch("/api/admin/users");
+    const usersData = await usersResponse.json();
+    const users = usersData.users || [];
+    console.log(users)
+
+    
+    // Load all courses
+    const coursesResponse = await fetch("/api/courses");
+    const coursesData = await coursesResponse.json();
+    const courses = coursesData.courses || [];
+    console.log(courses)
+    // Update user management tab
+    const usersElement = document.getElementById("users-list");
+    if (usersElement) {
+      if (users.length === 0) {
+        usersElement.innerHTML = '<div class="empty-state">No users registered yet.</div>';
+      } else {
+        usersElement.innerHTML = `
+          <table class="data-table border="1"">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Registered</th>
+               
+              </tr>
+            </thead>
+            <tbody>
+              ${users.map(user => `
+                <tr>
+                  <td>${user.name}</td>
+                  <td>${user.email}</td>
+                  <td><span class="role-badge ${user.role.toLowerCase()}">${user.role}</span></td>
+                  <td>${formatDate(user.registeredAt)}</td>
+
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+    }
+    
+    // Update course management tab
+    const coursesElement = document.getElementById("all-courses-list-2");
+    if (coursesElement) {
+      if (courses.length === 0) {
+        coursesElement.innerHTML = '<div class="empty-state">No courses available yet.</div>';
+      } else {
+        coursesElement.innerHTML = `
+          <table class="data-table border="1"">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Instructor</th>
+                <th>Students</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${courses.map(course => {
+                const instructor = users.find(u => u.userId === course.instructorId) || {};
+                return `
+                  <tr>
+                    <td>${course.title}</td>
+                    <td>${course.instructorName || 'Unknown'}</td>
+                    <td>${course.enrollmentCount || 0}</td>
+                    <td>${formatDate(course.createdAt)}</td>
+                  
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+    }
+    
+    // Update platform analytics tab
+    const analyticsElement = document.getElementById("platform-analytics-content");
+    if (analyticsElement) {
+      // Calculate platform statistics
+      const learnerCount = users.filter(u => u.role === 'Learner').length;
+      const instructorCount = users.filter(u => u.role === 'Instructor').length;
+      const courseCount = courses.length;
+      
+      // Get all enrollments
+      const enrollmentsResponse = await fetch("/api/enrollments");
+      const enrollmentsData = await enrollmentsResponse.json();
+      const enrollments = enrollmentsData.enrollments || [];
+      const enrollmentCount = enrollments.length;
+      
+      // Get all assessments
+      const assessmentsResponse = await fetch("/api/assessments");
+      const assessmentsData = await assessmentsResponse.json();
+      const assessments = assessmentsData.assessments || [];
+      const assessmentCount = assessments.length;
+      console.log(enrollmentCount,assessmentCount,courseCount)
+      analyticsElement.innerHTML = `
+        <div class="analytics-cards">
+          <div class="analytics-card">
+            <h3>Users</h3>
+            <div class="analytics-value">${users.length}</div>
+            <div class="analytics-breakdown">
+              <span>Learners: ${learnerCount}</span>
+              <span>Instructors: ${instructorCount}</span>
+              <span>Admins: ${users.length - learnerCount - instructorCount}</span>
+            </div>
+          </div>
+          
+          <div class="analytics-card">
+            <h3>Courses</h3>
+            <div class="analytics-value">${courseCount}</div>
+            <div class="analytics-breakdown">
+              <span>Average Enrollments: ${courseCount ? Math.round(enrollmentCount / courseCount) : 0}</span>
+            </div>
+          </div>
+          
+          <div class="analytics-card">
+            <h3>Enrollments</h3>
+            <div class="analytics-value">${enrollmentCount}</div>
+            <div class="analytics-breakdown">
+              <span>Per Learner: ${learnerCount ? Math.round(enrollmentCount / learnerCount * 10) / 10 : 0}</span>
+            </div>
+          </div>
+          
+          <div class="analytics-card">
+            <h3>Assessments</h3>
+            <div class="analytics-value">${assessmentCount}</div>
+            <div class="analytics-breakdown">
+              <span>Average Score: ${assessmentCount ? Math.round(assessments.reduce((sum, a) => sum + a.score, 0) / assessmentCount) : 0}%</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="analytics-charts">
+          <div class="chart">
+            <h3>User Growth</h3>
+            <div id="user-growth-chart" class="chart-placeholder">Chart loading...</div>
+          </div>
+          
+          <div class="chart">
+            <h3>Course Popularity</h3>
+            <div id="course-popularity-chart" class="chart-placeholder">Chart loading...</div>
+          </div>
+        </div>
+      `;
+      
+      // Load charts (in a real app, this would use a library like Chart.js)
+      setTimeout(() => {
+        document.getElementById("user-growth-chart").innerHTML = "User growth chart would render here";
+        document.getElementById("course-popularity-chart").innerHTML = "Course popularity chart would render here";
+      }, 500);
+    }
+    
+  } catch (err) {
+    console.error("Error loading admin data:", err);
+    showStatus("admin-dashboard-status", "Failed to load data. Please try again later.", false);
+  }
+}
+
+// Assessment and Feedback Functions
+async function submitAssessment() {
+  const courseId = document.getElementById("assessment-courseId").value;
+  const score = document.getElementById("assessment-score").value;
+
+  if (!courseId || !score) {
+    showStatus("assessment-status", "Please fill all fields", false);
+    return;
+  }
+
+  const assessment = {
+    assessmentId: generateId(),
+    courseId,
+    userId: currentUser.userId,
+    score: parseInt(score),
+    completedAt: new Date().toISOString(),
+  };
+
+  try {
+    const response = await fetch("/api/assessments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(assessment),
+    });
+    
+    if (response.ok) {
+      showStatus("assessment-status", "Assessment submitted successfully!", true);
+      document.getElementById("assessment-courseId").value = "";
+      document.getElementById("assessment-score").value = "";
+      
+      // Update the enrollment progress for this course
+      await updateCourseProgress(courseId, parseInt(score));
+      
+      // Reload the learner data to reflect updated progress
+      if (currentUser.role === 'Learner') {
+        loadLearnerData();
+      }
+    } else {
+      const errorData = await response.json();
+      showStatus("assessment-status", errorData.error || "Failed to submit assessment", false);
+    }
+  } catch (err) {
+    console.error("Error submitting assessment:", err);
+    showStatus("assessment-status", "Failed to submit assessment. Please try again.", false);
+  }
+}
+
+async function updateCourseProgress(courseId, score) {
+  // Find the enrollment for this course
+  const enrollment = userEnrollments.find(e => e.courseId === courseId);
+  if (!enrollment) return;
+  
+  // Update the progress based on the assessment score
+  // This is a simplified approach - in a real app, you might have more complex progress calculation
+  const newProgress = Math.max(enrollment.progress || 0, Math.round(score * 0.8)); // 80% of the score as progress
+  
+  try {
+    await fetch(`/api/enrollments/${enrollment.enrollmentId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ progress: newProgress }),
+    });
+    
+    // Update the local enrollment data
+    enrollment.progress = newProgress;
+  } catch (err) {
+    console.error("Error updating progress:", err);
+  }
+}
+
+async function submitFeedback() {
+  const courseId = document.getElementById("feedback-courseId").value;
+  const comment = document.getElementById("feedback-comment").value;
+  const rating = document.getElementById("feedback-rating").value;
+
+  if (!courseId || !comment || !rating) {
+    showStatus("feedback-status", "Please fill all fields", false);
+    return;
+  }
+
+  const feedback = {
+    feedbackId: generateId(),
+    courseId,
+    userId: currentUser.userId,
+    comment,
+    rating: parseInt(rating),
+    createdAt: new Date().toISOString(),
+  };
+
+  try {
+    const response = await fetch("/api/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(feedback),
+    });
+    
+    if (response.ok) {
+      showStatus("feedback-status", "Feedback submitted successfully!", true);
+      document.getElementById("feedback-courseId").value = "";
+      document.getElementById("feedback-comment").value = "";
+      document.getElementById("feedback-rating").value = "5";
+    } else {
+      const errorData = await response.json();
+      showStatus("feedback-status", errorData.error || "Failed to submit feedback", false);
+    }
+  } catch (err) {
+    console.error("Error submitting feedback:", err);
+    showStatus("feedback-status", "Failed to submit feedback. Please try again.", false);
+  }
+}
+
+// Course Creation Function
+async function createCourse() {
+  const title = document.getElementById("course-title").value
+  const description = document.getElementById("course-description").value;
+  const duration = document.getElementById("course-duration").value;
+  const difficulty = document.getElementById("course-level").value;
+
+
+  if (!title || !description) {
+    showStatus("create-course-status", "Title and description are required", false);
+    return;
+  }
+
+  const course = {
+    courseId: generateId(),
+    instructorId: currentUser.userId,
+    instructorName: currentUser.name,
+    title,
+    description,
+    duration: duration || "Not specified",
+    difficulty: difficulty || "Intermediate",
+    createdAt: new Date().toISOString(),
+    enrollmentCount: 0,
+    modules: [], // This would be populated with course content
+  };
+
+  try {
+    const response = await fetch("/api/courses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(course),
+    });
+    
+    if (response.ok) {
+      showStatus("create-course-status", "Course created successfully!", true);
+      
+      // Clear the form
+      document.getElementById("course-title").value = "";
+      document.getElementById("course-description").value = "";
+      document.getElementById("course-duration").value = "";
+      document.getElementById("course-level").value = "intermediate";
+
+      
+      // Switch to the courses tab and reload data
+      if (currentUser.role === 'Instructor') {
+        showTab("instructor-courses");
+        loadInstructorData();
+      }
+    } else {
+      const errorData = await response.json();
+      showStatus("create-course-status", errorData.error || "Failed to create course", false);
+    }
+  } catch (err) {
+    console.error("Error creating course:", err);
+    showStatus("create-course-status", "Failed to create course. Please try again.", false);
+  }
+}
+
+      function logout() {
+        currentUser = null;
+        document.getElementById("user-name").textContent = "Guest";
+        showSection("home");
+      }
+
+      showSection("home");
+    </script>
+  </body>
+</html>
