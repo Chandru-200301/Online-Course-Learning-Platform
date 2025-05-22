@@ -71,7 +71,7 @@ async function createDiscussionPost(post) {
   if (!db) throw new Error('Database not connected');
   await db.collection('discussions').insertOne(post);
 }
-
+//module exports
 module.exports = {
   connectDB,
   createUser,
